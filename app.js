@@ -6,7 +6,11 @@ require("dotenv").config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin : 'http://127.0.0.1:5500',
+  methods : [' GET' ,'POST']
+}))
+
 
 const sequelize = require("./backend/util/db");
 
