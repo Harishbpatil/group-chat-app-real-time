@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Form</title>
-    <link rel="stylesheet" href="/login/login.css" />
-  </head>
-  <body>
-    <div class="login-container">
-      <form class="login-form" action="#" method="post">
-        <h2>Login</h2>
-        <div class="input-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div class="input-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-        <div class="input-group">
-          <button type="submit">Submit</button>
-        </div>
-        <p class="signup-link">
-          New User!!,Don't have an account? <a href="/signup/signup.html">Sign up</a>
-        </p>
-      </form>
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Form</title>
+  <link rel="stylesheet" href="/login/login.css" />
+</head>
+<body>
+  <div class="login-container">
+    <form class="login-form" id="login-form" method="post"> 
+      <h2>Login</h2>
+      <div class="input-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="input-group">
+        <button type="submit">Submit</button>
+      </div>
+      <p class="signup-link">
+        New User!!, Don't have an account? <a href="/signup/signup.html">Sign up</a>
+      </p>
+    </form>
+  </div>
+  <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="/login/login.js"></script> 
+</body>
 </html>
