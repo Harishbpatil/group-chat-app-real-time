@@ -6,11 +6,12 @@ require("dotenv").config();
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-  origin : 'http://127.0.0.1:5500',
-  methods : [' GET' ,'POST']
-}))
-
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+    methods: [" GET", "POST"],
+  })
+);
 
 const sequelize = require("./backend/util/db");
 
@@ -22,6 +23,10 @@ app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/frontend/signup/signup.html"));
+});
+
+app.get("/chatapp", (req, res) => {
+  res.sendFile(path.join(__dirname, "/frontend/chatapp/chatapp.html"));
 });
 
 sequelize

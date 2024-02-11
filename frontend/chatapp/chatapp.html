@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chat App</title>
+    <link rel="stylesheet" href="/chatapp/chatapp.css" />
+  </head>
+  <body>
+    <div class="display">
+      <h2>Chat App</h2>
+
+      <div class="messages">
+        <div class="u-message">You joined</div>
+      </div>
+      <div class="send-messages">
+        <form>
+          <input
+            type="text"
+            name="message"
+            id="message"
+            placeholder="Type your message here"
+          />
+          <button type="submit">send</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="/chatapp/chatapp.js"></script>
+</html>
