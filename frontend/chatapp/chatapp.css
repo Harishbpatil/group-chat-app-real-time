@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
 }
 
 .display {
@@ -9,48 +10,49 @@ body {
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 h2 {
   text-align: center;
+  color: #333;
 }
 
 .messages {
-  height: 300px;
+  max-height: 300px;
   overflow-y: auto;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
   padding: 10px;
-  border-radius: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
 .u-message {
-  background-color: #565b5f;
-  color: #fff;
-  padding: 8px;
-  border-radius: 5px;
+  background-color: #dcf8c6;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 8px;
   margin-bottom: 5px;
 }
 
 .send-messages input[type="text"] {
-  width: calc(100% - 80px);
+  width: calc(100% - 90px);
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
-.send-messages button {
-  width: 70px;
+.send-messages button[type="submit"] {
+  width: 80px;
   padding: 10px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.send-messages button:hover {
+.send-messages button[type="submit"]:hover {
   background-color: #0056b3;
 }

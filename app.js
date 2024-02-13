@@ -4,6 +4,7 @@ const path = require("path");
 
 require("dotenv").config();
 const app = express();
+app.use(express.json());
 
 const sequelize = require("./backend/util/db");
 
