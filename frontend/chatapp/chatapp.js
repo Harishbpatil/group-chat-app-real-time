@@ -1,79 +1,105 @@
-const messages = document.querySelector(".messages");
+const messagesContainer = document.querySelector(".messages");
 window.addEventListener("load", renderElements);
+
+setInterval(async () => {
+  await renderElements();
+}, 4000);
 
 async function renderElements() {
   try {
+    let messages = [];
+    if (localStorage.getItem("messages")) {
+      messages = JSON.parse(localStorage.getItem("messages"));
+    }
+
     if (!localStorage.getItem("token")) {
       window.location = "login.html";
     }
+
     const v1 = axios.get("http://localhost:4000/user/all-users", {
       headers: {
         "auth-token": localStorage.getItem("token"),
       },
     });
-    const v2 = axios.get("http://localhost:4000/message/get-messages", {
-      headers: {
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
 
-    const [res, messages] = await Promise.all([v1, v2]);
-    console.log(res);
-    console.log(messages);
-    res.data.users.forEach((user) => {
+    const last = messages.length === 0 ? 0 : messages[messages.length - 1].id;
+    const v2 = axios.get(
+      `http://localhost:4000/message/get-messages?id=${last}`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+
+    const [res, res2] = await Promise.all([v1, v2]);
+    messagesContainer.innerHTML = "";
+
+    const div = document.createElement("div");
+    div.textContent = "You joined";
+    div.className = "u-joined";
+    messagesContainer.appendChild(div);
+
+    const users = res.data.users;
+    users.forEach((user) => {
       showUser(user);
     });
-    const id = messages.data.id;
-    messages.data.messages.forEach((message) => {
-      showMessage(message, id === message.userId);
+
+    messages = [...messages, ...res2.data.messages];
+    localStorage.setItem("messages", JSON.stringify(messages));
+
+    const id = res2.data.id;
+    messages.forEach((message) => {
+      showMessage(message, id === message.userId, users);
     });
-    setTimeout(() => {
-      location.reload();
-    }, 1000);
+
+    const element = document.querySelector(".messages");
+    element.scrollTop = element.scrollHeight;
   } catch (e) {
     console.log(e);
   }
 }
 
-
 function showUser(user) {
   const div = document.createElement("div");
   div.textContent = user.name + " joined";
-  div.className = "o-message";
-  messages.appendChild(div);
+  div.className = "o-joined";
+  messagesContainer.appendChild(div);
 }
 
-function showMessage(data, user) {
+function showMessage(data, user, users) {
   const div = document.createElement("div");
-  div.textContent = data.message;
   if (user) {
     div.className = "u-message";
+    div.textContent = "You: " + data.message;
   } else {
     div.className = "o-message";
+    const userData = users.find((user) => user.id === data.userId);
+    div.textContent = userData
+      ? userData.name + ": " + data.message
+      : "Unknown User: " + data.message;
   }
 
-  messages.appendChild(div);
+  messagesContainer.appendChild(div);
 }
 
-document.forms[0].addEventListener("submit", sendMessage);
+document.getElementById("messageForm").addEventListener("submit", sendMessage);
 
 async function sendMessage(e) {
   try {
     e.preventDefault();
-    const message = e.target.message.value;
-    const data = { message };
+    const data = { message: e.target.message.value };
     const res = await axios.post(
       "http://localhost:4000/message/add-message",
       data,
       {
         headers: {
-          "Content-Type": "application/json",
           "auth-token": localStorage.getItem("token"),
         },
       }
     );
     console.log(res);
-    showMessage(message, true);
+    showMessage(data, true);
     e.target.message.value = "";
   } catch (e) {
     console.log(e);

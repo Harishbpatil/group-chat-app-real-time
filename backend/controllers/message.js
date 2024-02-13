@@ -22,11 +22,11 @@ exports.addMessage = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
   try {
+    const { id } = req.query; 
     const result = await Message.findAll({
-        include : {
-            model : User,
-            attributes : ['id' , 'name']
-        }
+      where: {
+        id: { [Op.gt]: id }
+      }
     });
 
     return res.json({ success: true, messages: result, id: req.user.id });
