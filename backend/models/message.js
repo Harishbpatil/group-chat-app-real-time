@@ -14,4 +14,5 @@ const Message = sequelize.define("message", {
   },
 });
 
+
 module.exports = Message;

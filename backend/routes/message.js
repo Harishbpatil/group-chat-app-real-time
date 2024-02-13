@@ -7,4 +7,5 @@ const messageControllers = require("../controllers/message");
 
 router.post("/add-message", auth, messageControllers.addMessage);
 
+
 module.exports = router;

@@ -14,6 +14,7 @@ const User = require("./backend/models/user");
 
 const messageRoutes = require("./backend/routes/message");
 
+
 User.hasMany(Message);
 Message.belongsTo(User);
 
