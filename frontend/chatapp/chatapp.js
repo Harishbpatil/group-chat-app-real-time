@@ -35,6 +35,7 @@ async function renderElements() {
   }
 }
 
+
 function showUser(user) {
   const div = document.createElement("div");
   div.textContent = user.name + " joined";
