@@ -5,6 +5,21 @@ const path = require("path");
 require("dotenv").config();
 const app = express();
 
+const sequelize = require("./backend/util/db");
+
+const userRoutes = require("./backend/routes/user");
+
+const Message = require("./backend/models/message");
+const User = require("./backend/models/user");
+
+const messageRoutes = require("./backend/routes/message");
+
+User.hasMany(Message);
+Message.belongsTo(User);
+
+app.use(express.static(path.join(__dirname, "frontend")));
+app.use("/user", userRoutes);
+app.use("/message", messageRoutes);
 app.use(express.json());
 app.use(
   cors({
@@ -12,14 +27,6 @@ app.use(
     methods: [" GET", "POST"],
   })
 );
-
-const sequelize = require("./backend/util/db");
-
-const userRoutes = require("./backend/routes/user");
-
-app.use(express.static(path.join(__dirname, "frontend")));
-
-app.use("/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/frontend/signup/signup.html"));
