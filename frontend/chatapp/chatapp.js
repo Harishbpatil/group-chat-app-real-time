@@ -27,6 +27,9 @@ async function renderElements() {
     messages.data.messages.forEach((message) => {
       showMessage(message, id === message.userId);
     });
+    setTimeout(() => {
+      location.reload();
+    }, 1000);
   } catch (e) {
     console.log(e);
   }
@@ -57,7 +60,7 @@ async function sendMessage(e) {
   try {
     e.preventDefault();
     const message = e.target.message.value;
-    const data = { message }; 
+    const data = { message };
     const res = await axios.post(
       "http://localhost:4000/message/add-message",
       data,
