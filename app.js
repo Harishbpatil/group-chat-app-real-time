@@ -8,20 +8,29 @@ app.use(express.json());
 
 const sequelize = require("./backend/util/db");
 
-const userRoutes = require("./backend/routes/user");
-
 const Message = require("./backend/models/message");
 const User = require("./backend/models/user");
+const Group = require("./backend/models/group");
+const Member = require("./backend/models/member");
 
+const groupRoutes = require("./backend/routes/group");
 const messageRoutes = require("./backend/routes/message");
+const userRoutes = require("./backend/routes/user");
 
+User.belongsToMany(Group, { through: Member });
+Group.belongsToMany(User, { through: Member });
 
-User.hasMany(Message);
-Message.belongsTo(User);
+Group.hasMany(Message);
+Message.belongsTo(Group);
+
+Member.hasMany(Message);
+Message.belongsTo(Member);
 
 app.use(express.static(path.join(__dirname, "frontend")));
 app.use("/user", userRoutes);
 app.use("/message", messageRoutes);
+app.use("/group", groupRoutes);
+
 app.use(express.json());
 app.use(
   cors({

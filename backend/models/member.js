@@ -1,18 +1,17 @@
 const sequelize = require("../util/db");
-
 const Sequelize = require("sequelize");
 
-const Message = sequelize.define("message", {
+const Member = sequelize.define("member", {
   id: {
     type: Sequelize.INTEGER,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
     allowNull: false,
   },
-  message: {
-    type: Sequelize.STRING,
-    allowNull: false,
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
   },
 });
 
-module.exports = Message;
+module.exports = Member;
