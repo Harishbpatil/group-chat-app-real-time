@@ -4,7 +4,7 @@ const auth = require("../middlewares/auth");
 const messageControllers = require("../controllers/message");
 
 router.post("/add-message", auth, messageControllers.addMessage);
-router.get("/get-messages/:id", auth, messageControllers.getMessages); // Update route definition to include :id parameter
+router.get("/get-messages/:groupId", auth, messageControllers.getMessages); 
 
 
 module.exports = router;

@@ -22,6 +22,8 @@ h2 {
 .groups {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .create-group {
@@ -106,4 +108,8 @@ h2 {
 
 .send-messages button[type="submit"]:hover {
   background-color: #0056b3;
+}
+
+.hide {
+  display: none;
 }
