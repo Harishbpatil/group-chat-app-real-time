@@ -1,115 +1,132 @@
-body {
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: Arial, sans-serif;
   background-color: #f2f2f2;
 }
 
-h2 {
-  text-align: center;
-  color: #333;
-}
-
 .display {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
+  display: flex;
+  height: 100vh;
 }
 
 .groups {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  flex: 1;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
 }
 
-.create-group {
-  flex-grow: 1;
-}
-
-.create-group button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+.group-items {
+  padding: 10px;
   cursor: pointer;
+  border-bottom: 1px solid #eee;
 }
 
-.new-group {
-  display: none;
-  margin-top: 10px;
+.group-items:hover {
+  background-color: #90eea0;
 }
 
-.new-group form {
-  display: flex;
-  align-items: center;
-}
-
-.new-group label {
-  margin-right: 10px;
-}
-
-.new-group input[type="text"] {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.show-groups {
-  flex-grow: 1;
+.group-items span {
+  float: right;
+  font-size: 20px;
+  margin-left: 10px;
+  color: #695555;
 }
 
 .group-message {
-  margin-top: 20px;
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 10px;
+  background-color: #075e54;
+  color: #fff;
 }
 
 .messages {
-  max-height: 300px;
-  overflow-y: auto;
+  flex: 1;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.messages .message {
-  background-color: #dcf8c6;
-  color: #000;
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 5px;
+  overflow-y: auto;
 }
 
 .send-messages {
-  margin-top: 10px;
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+.send-messages form {
+  display: flex;
 }
 
 .send-messages input[type="text"] {
-  width: calc(100% - 90px);
-  padding: 10px;
+  flex: 1;
+  padding: 8px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 5px;
 }
 
-.send-messages button[type="submit"] {
-  width: 80px;
-  padding: 10px;
-  background-color: #007bff;
+.send-messages button {
+  padding: 8px 15px;
+  margin-left: 10px;
+  background-color: #075e54;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.send-messages button[type="submit"]:hover {
-  background-color: #0056b3;
+.send-messages button:hover {
+  background-color: #128c7e;
+}
+
+.show-users {
+  padding: 10px;
+  background-color: #6b5d5d;
+  border-top: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.user {
+  padding: 5px;
+}
+
+.user span {
+  color: #999;
+  font-size: 12px;
 }
 
 .hide {
   display: none;
+}
+
+#create-new-group button[type="submit"] {
+  padding: 8px 15px;
+  margin-top: 10px;
+  background-color: #4caf50; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#create-new-group button[type="submit"]:hover {
+  background-color: #45a049; 
+}
+
+.crete-grp button {
+  padding: 8px 15px;
+  margin-top: 10px;
+  background-color: #4caf50; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }

@@ -1,4 +1,5 @@
-const Group = require("../models/Group");
+const { Op } = require("sequelize");
+const Group = require("../models/group");
 
 exports.createNewGroup = async (req, res) => {
   try {
@@ -33,7 +34,7 @@ exports.joinGroup = async (req, res) => {
     const group = await Group.findByPk(groupId);
     if (group) {
       const member = await group.addUser(req.user);
-      return res.json(member);
+      return res.json({ member, group });
     } else {
       return res.status(404).json({ msg: "Group does not exist" });
     }
@@ -48,10 +49,16 @@ exports.joinGroup = async (req, res) => {
 exports.getUsers = async (req, res) => {
   try {
     const groupId = req.params.groupId;
+    const id = req.query.id || 0;
     const groups = await req.user.getGroups({ where: { id: groupId } });
     if (groups.length == 1) {
       const group = groups[0];
       const users = await group.getUsers({
+        where: {
+          id: {
+            [Op.gt]: id,
+          },
+        },
         attributes: ["id", "name"],
       });
       return res.json(users);

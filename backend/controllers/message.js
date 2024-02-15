@@ -1,7 +1,7 @@
 const { fn, Sequelize, col, Op } = require("sequelize");
 const Message = require("../models/message");
 const User = require("../models/user");
-const Group = require("../models/Group");
+const Group = require("../models/group");
 const Member = require("../models/member");
 
 exports.addMessage = async (req, res) => {
@@ -28,13 +28,20 @@ exports.addMessage = async (req, res) => {
 exports.getMessages = async (req, res) => {
   try {
     const id = req.params.groupId;
+    const messageId = req.query.messageId || 0;
     const group = await Group.findByPk(id);
     const member = await req.user.getGroups({ where: { id } });
     if (member.length == 0) {
       return res.status(401).json({ msg: "unauthorized access" });
     }
     // return res.json(member)
-    const result = await group.getMessages();
+    const result = await group.getMessages({
+      where: {
+        id: {
+          [Op.gt]: messageId,
+        },
+      },
+    });
 
     return res.json({
       success: true,
