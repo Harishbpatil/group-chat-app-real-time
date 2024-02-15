@@ -17,7 +17,7 @@ body {
 
 .groups {
   flex: 1;
-  background-color: #fff;
+  background-color: #d5e0d9;
   border-right: 1px solid #ccc;
   overflow-y: auto;
 }
