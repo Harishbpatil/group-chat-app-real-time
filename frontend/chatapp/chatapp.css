@@ -24,25 +24,25 @@
 .group-items {
   display: flex;
   justify-content: space-between;
-  background: #aee7e1; 
+  background: #aee7e1;
   font-size: large;
   margin: 8px 10px;
   padding: 14px;
   cursor: pointer;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .group-items span:last-child {
   order: 2;
-  background: #78ad8d; 
+  background: #78ad8d;
   border-radius: 14px;
   min-width: 1.8vw;
   text-align: center;
-  transition: background-color 0.3s, color 0.3s; 
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .group-items:hover {
-  background: #128c7e; 
+  background: #128c7e;
 }
 
 .messages {
@@ -56,7 +56,7 @@
 }
 
 .u-joined {
-  background: #f2f2f2; 
+  background: #f2f2f2;
   padding: 10px;
   width: 40vw;
   height: fit-content;
@@ -73,23 +73,27 @@
 }
 
 .u-message {
-  background: #dcf8c6; 
+  background: #5dd187;
   padding: 10px;
   border-color: white;
-  border-radius: 1%;
-  width: 40vw;
+  border-radius: 10%;
+  width: auto;
   height: fit-content;
   font-size: medium;
-  text-align: end;
+  text-align: right;
+  margin: 2px 2px 2px auto;
 }
 
 .o-message {
-  background: #fff; 
+  background: #ffffff;
   padding: 10px;
-  border-color: wheat;
-  width: 40vw;
+  border-color: white;
+  border-radius: 10%;
+  width: auto;
   height: fit-content;
   font-size: medium;
+  text-align: left;
+  margin: 2px auto 2px 2px;
 }
 
 .send-messages > form {
@@ -111,15 +115,15 @@
   margin: 2px;
   padding: 5px 8px;
   border-radius: 4px;
-  background-color: #075e54; 
-  color: #fff; 
+  background-color: #075e54;
+  color: #fff;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .send-messages > form > button:hover {
-  background-color: #128c7e; 
+  background-color: #128c7e;
 }
 
 .show-users {
@@ -133,27 +137,27 @@
 }
 
 .user {
-  background: #98ebcf; 
+  background: #98ebcf;
   font-size: x-large;
   display: flex;
   padding: 12px;
   justify-content: space-between;
   margin: 7px 0;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .user:hover {
-  background-color: #ccc6c6; 
+  background-color: #ccc6c6;
 }
 
 .curr_user {
-  background: #c4ec9f; 
+  background: #c4ec9f;
   font-size: x-large;
   display: flex;
   padding: 12px;
   justify-content: center;
   margin: 7px 0;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .curr_user:hover {
@@ -161,15 +165,15 @@
 }
 
 .add-user {
-  background: #b9ecdb; 
+  background: #b9ecdb;
   font-size: x-large;
   padding: 12px;
   margin: 7px 0;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
 }
 
 .add-user:hover {
-  background-color: #bce2b0; 
+  background-color: #bce2b0;
 }
 
 .admin span {
@@ -191,9 +195,37 @@
   display: flex;
   align-items: center;
   height: 7vh;
-  background: #0b7467; 
+  background: #0b7467;
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  color: #fff; 
+  color: #fff;
+}
+
+#crete-grp {
+  display: flex;
+  align-items: center;
+  height: 7vh;
+  background: #1fac76;
+
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 10px;
+  padding: 0px 50px;
+  margin-left: 10px;
+  position: relative;
+  color: #fff;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+#crete-grp:hover {
+  background: #128c7e;
+  transform: scale(1.05);
+}
+
+#crete-grp::after {
+  content: "+";
+  position: absolute;
+  right: 10px;
 }
