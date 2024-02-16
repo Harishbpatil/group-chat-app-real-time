@@ -16,6 +16,7 @@ const Member = require("./backend/models/member");
 const groupRoutes = require("./backend/routes/group");
 const messageRoutes = require("./backend/routes/message");
 const userRoutes = require("./backend/routes/user");
+const adminRoutes = require("./backend/routes/admin");
 
 User.belongsToMany(Group, { through: Member });
 Group.belongsToMany(User, { through: Member });
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, "frontend")));
 app.use("/user", userRoutes);
 app.use("/message", messageRoutes);
 app.use("/group", groupRoutes);
+app.use("/admin", adminRoutes);
 
 app.use(express.json());
 app.use(

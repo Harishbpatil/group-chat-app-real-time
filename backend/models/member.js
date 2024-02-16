@@ -1,4 +1,5 @@
 const sequelize = require("../util/db");
+
 const Sequelize = require("sequelize");
 
 const Member = sequelize.define("member", {
@@ -9,6 +10,10 @@ const Member = sequelize.define("member", {
     allowNull: false,
   },
   admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  creator: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
   },

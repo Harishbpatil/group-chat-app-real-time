@@ -10,5 +10,4 @@ router.get("/get-groups", auth, groupController.getGroups);
 router.get("/join-group/:groupId", auth, groupController.joinGroup);
 router.get("/all-users/:groupId", auth, groupController.getUsers);
 
-
 module.exports = router;

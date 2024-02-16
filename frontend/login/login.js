@@ -14,7 +14,7 @@ form.addEventListener("submit", async (e) => {
     if (res.status == 200) {
       alert("logged in successfully");
       localStorage.setItem("token", res.data.token);
-      window.location = '/chatapp';
+      window.location = "/chatapp";
     }
   } catch (e) {
     console.log(e);

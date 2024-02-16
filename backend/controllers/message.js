@@ -10,10 +10,9 @@ exports.addMessage = async (req, res) => {
 
     const message = req.body.message;
     const group = await Group.findByPk(groupId);
-    // const member = await Member.findOne({groupId , id : memberId})
+
     const user = await group.getUsers({ where: { id: req.user.id } });
     const member = user[0].member;
-    // return res.json(member)
 
     const result = await member.createMessage({ message, groupId });
     return res.json(result);

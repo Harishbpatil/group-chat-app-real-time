@@ -1,132 +1,199 @@
-
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
 }
 
 .display {
   display: flex;
-  height: 100vh;
-}
-
-.groups {
-  flex: 1;
-  background-color: #d5e0d9;
-  border-right: 1px solid #ccc;
-  overflow-y: auto;
-}
-
-.group-items {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-
-.group-items:hover {
-  background-color: #90eea0;
-}
-
-.group-items span {
-  float: right;
-  font-size: 20px;
-  margin-left: 10px;
-  color: #695555;
-}
-
-.group-message {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  padding: 10px;
-  background-color: #075e54;
-  color: #fff;
-}
-
-.messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.send-messages {
-  padding: 10px;
-  background-color: #f2f2f2;
-}
-
-.send-messages form {
-  display: flex;
-}
-
-.send-messages input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.send-messages button {
-  padding: 8px 15px;
-  margin-left: 10px;
-  background-color: #075e54;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.send-messages button:hover {
-  background-color: #128c7e;
-}
-
-.show-users {
-  padding: 10px;
-  background-color: #6b5d5d;
-  border-top: 1px solid #ccc;
-  overflow-y: auto;
-}
-
-.user {
-  padding: 5px;
-}
-
-.user span {
-  color: #999;
-  font-size: 12px;
+  flex-direction: row;
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
-#create-new-group button[type="submit"] {
-  padding: 8px 15px;
-  margin-top: 10px;
-  background-color: #4caf50; 
-  color: white;
-  border: none;
-  border-radius: 5px;
+.groups {
+  min-width: 25vw;
+  max-width: 25vw;
+}
+
+.group-message {
+  width: 74%;
+}
+
+.group-items {
+  display: flex;
+  justify-content: space-between;
+  background: #aee7e1; 
+  font-size: large;
+  margin: 8px 10px;
+  padding: 14px;
   cursor: pointer;
+  transition: background-color 0.3s; 
 }
 
-#create-new-group button[type="submit"]:hover {
-  background-color: #45a049; 
+.group-items span:last-child {
+  order: 2;
+  background: #78ad8d; 
+  border-radius: 14px;
+  min-width: 1.8vw;
+  text-align: center;
+  transition: background-color 0.3s, color 0.3s; 
 }
 
-.crete-grp button {
-  padding: 8px 15px;
-  margin-top: 10px;
-  background-color: #4caf50; 
-  color: white;
+.group-items:hover {
+  background: #128c7e; 
+}
+
+.messages {
+  min-height: 85vh;
+  max-height: 85vh;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+}
+
+.u-joined {
+  background: #f2f2f2; 
+  padding: 10px;
+  width: 40vw;
+  height: fit-content;
+  font-size: medium;
+  text-align: center;
+}
+
+.o-joined {
+  padding: 10px;
+  width: 40vw;
+  height: fit-content;
+  font-size: medium;
+  text-align: center;
+}
+
+.u-message {
+  background: #dcf8c6; 
+  padding: 10px;
+  border-color: white;
+  border-radius: 1%;
+  width: 40vw;
+  height: fit-content;
+  font-size: medium;
+  text-align: end;
+}
+
+.o-message {
+  background: #fff; 
+  padding: 10px;
+  border-color: wheat;
+  width: 40vw;
+  height: fit-content;
+  font-size: medium;
+}
+
+.send-messages > form {
+  display: flex;
+  gap: 0.2em;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-messages > form > input {
+  padding: 6px 10px;
+  width: 48%;
+  font-size: medium;
+  outline: none;
+  border-radius: 7px;
+}
+
+.send-messages > form > button {
+  margin: 2px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  background-color: #075e54; 
+  color: #fff; 
   border: none;
-  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s; 
+}
+
+.send-messages > form > button:hover {
+  background-color: #128c7e; 
+}
+
+.show-users {
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
+.add-users {
+  max-height: 85vh;
+  overflow-y: scroll;
+}
+
+.user {
+  background: #98ebcf; 
+  font-size: x-large;
+  display: flex;
+  padding: 12px;
+  justify-content: space-between;
+  margin: 7px 0;
+  transition: background-color 0.3s; 
+}
+
+.user:hover {
+  background-color: #ccc6c6; 
+}
+
+.curr_user {
+  background: #c4ec9f; 
+  font-size: x-large;
+  display: flex;
+  padding: 12px;
+  justify-content: center;
+  margin: 7px 0;
+  transition: background-color 0.3s; 
+}
+
+.curr_user:hover {
+  background-color: #e0e0e0;
+}
+
+.add-user {
+  background: #b9ecdb; 
+  font-size: x-large;
+  padding: 12px;
+  margin: 7px 0;
+  transition: background-color 0.3s; 
+}
+
+.add-user:hover {
+  background-color: #bce2b0; 
+}
+
+.admin span {
+  margin: 0 15px;
+  font-size: medium;
+  color: blue;
+  border-radius: 7px;
+  border: 3px px solid #9c1a1ade;
+  height: fit-content;
+}
+
+.user button {
+  margin: 0px 9px;
+  padding: 5px 5px;
+  color: #0d0e0d;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 7vh;
+  background: #0b7467; 
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  color: #fff; 
 }
