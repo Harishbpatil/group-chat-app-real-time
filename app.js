@@ -6,6 +6,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
+
 const sequelize = require("./backend/util/db");
 
 const Message = require("./backend/models/message");

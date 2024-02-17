@@ -17,7 +17,7 @@ async function renderElements() {
     if (id) {
       console.log("id present");
       const group = await axios.get(
-        `http://localhost:4000/group/join-group/${id}`,
+        `http://54.88.157.175:4000/group/join-group/${id}`,
         {
           headers: {
             "auth-token": localStorage.getItem("token"),
@@ -26,7 +26,7 @@ async function renderElements() {
       );
       showGroups(group.data.group);
     }
-    const res = await axios.get("http://localhost:4000/group/get-groups", {
+    const res = await axios.get("http://54.88.157.175:4000/group/get-groups", {
       headers: {
         "auth-token": localStorage.getItem("token"),
       },
@@ -103,7 +103,7 @@ async function sendMessage(e) {
       groupId,
     };
     const res = await axios.post(
-      "http://localhost:4000/message/add-message",
+      "http://54.88.157.175:4000/message/add-message",
       data,
       {
         headers: {
@@ -131,7 +131,7 @@ async function createNewGroup(e) {
     e.preventDefault();
     console.log(e.target.name.value);
     const group = await axios.post(
-      "http://localhost:4000/group/create",
+      "http://54.88.157.175:4000/group/create",
       { name: e.target.name.value },
       {
         headers: {
@@ -167,7 +167,7 @@ async function showGroupMessages() {
       mId = final_messages[final_messages.length - 1].id;
     if (final_users.length > 0) uId = final_users[final_users.length - 1].id;
     const res = await axios.get(
-      `http://localhost:4000/message/get-messages/${group.id}/?messageId=${mId}`,
+      `http://54.88.157.175:4000/message/get-messages/${group.id}/?messageId=${mId}`,
       {
         headers: {
           "auth-token": localStorage.getItem("token"),
@@ -175,7 +175,7 @@ async function showGroupMessages() {
       }
     );
     const res2 = await axios.get(
-      `http://localhost:4000/group/all-users/${group.id}/?id=${uId}`,
+      `http://54.88.157.175:4000/group/all-users/${group.id}/?id=${uId}`,
       {
         headers: {
           "auth-token": localStorage.getItem("token"),
@@ -200,7 +200,7 @@ async function showGroupMessages() {
     localStorage.setItem(`user-${group.id}`, JSON.stringify(final_users));
 
     const res3 = await axios.post(
-      `http://localhost:4000/admin/show-users/${group.id}`,
+      `http://54.88.157.175:4000/admin/show-users/${group.id}`,
       null,
       {
         headers: {
@@ -248,7 +248,7 @@ function showUser(user) {
     makeAdmin.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:4000/admin/make-admin/${curr_group.id}`,
+          `http://54.88.157.175:4000/admin/make-admin/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -277,7 +277,7 @@ function showUser(user) {
     removeAdmin.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:4000/admin/remove-admin/${curr_group.id}`,
+          `http://54.88.157.175:4000/admin/remove-admin/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -310,7 +310,7 @@ function showUser(user) {
     removeUser.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:4000/admin/remove-member/${curr_group.id}`,
+          `http://54.88.157.175:4000/admin/remove-member/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -393,7 +393,7 @@ function addUser(user) {
     try {
       console.log(curr_group);
       const res = await axios.post(
-        `http://localhost:4000/admin/add-user/${curr_group.id}`,
+        `http://54.88.157.175:4000/admin/add-user/${curr_group.id}`,
         {
           id: user.id,
         },
