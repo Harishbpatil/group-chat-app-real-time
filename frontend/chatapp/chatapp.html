@@ -8,6 +8,7 @@
   </head>
 
   <body>
+   
     <div class="display">
       <div class="groups">
         <div class="create-group">
@@ -29,13 +30,25 @@
 
         <div class="hide messages"></div>
         <div class="hide send-messages">
-          <form>
+          <label class="switch">
+            <input type="checkbox" id="toggleInput" />
+            <span class="slider round"></span>
+          </label>
+
+          <form id="messsage">
             <input
               type="text"
               name="message"
               id="message"
               placeholder="Type your message here"
+              required
+              oninvalid="this.setCustomValidity('Enter message')"
+              oninput="setCustomValidity('')"
             />
+            <button type="submit">send</button>
+          </form>
+          <form id="files" class="hide" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" required />
             <button type="submit">send</button>
           </form>
         </div>
@@ -57,5 +70,5 @@
     </div>
   </body>
   <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-  <script src="/chatapp/chatapp.js"></script>
+  <script type="module" src="/chatapp/chatapp.js"></script>
 </html>

@@ -5,12 +5,12 @@ window.addEventListener("load", renderElements);
 var curr_group = null;
 const users = document.querySelector(".show-users");
 const displayUsers = document.querySelector(".display-users");
-
 async function renderElements() {
   try {
     if (!localStorage.getItem("token")) {
       window.location = "login.html";
     }
+
     const urlParams = new URLSearchParams(window.location.search);
 
     const id = urlParams.get("id");
@@ -40,6 +40,11 @@ async function renderElements() {
 
     window.location = "login.html";
   }
+}
+
+function scrollToBottom() {
+  const element = document.querySelector(".messages");
+  element.scrollTop = element.scrollHeight;
 }
 
 function showGroups(group) {
@@ -73,35 +78,41 @@ function showGroups(group) {
 
 setInterval(async () => {
   if (curr_group) await showGroupMessages();
-}, 2000);
+}, 1000);
 
-function showMessage(data, id, users) {
+function showMessage(data, users) {
+  const id = curr_group.member.id;
+
   const div = document.createElement("div");
   console.log(typeof users);
   if (id == data.memberId) {
     div.className = "u-message";
     div.textContent = "You: " + data.message;
   } else {
-    div.className = "o-message";
     const user = users.find((user) => data.memberId == user.member.id);
-    div.textContent = user.name + ": " + data.message;
+    console.log(user);
+    if (user) {
+      div.className = "o-message";
+      div.textContent = user.name + ": " + data.message;
+    } else {
+      return;
+    }
   }
 
   messages.appendChild(div);
 }
 
-document
-  .querySelector(".send-messages form")
-  .addEventListener("submit", sendMessage);
+document.querySelector("#messsage").addEventListener("submit", sendMessage);
 
 async function sendMessage(e) {
   try {
-    const groupId = curr_group.id;
     e.preventDefault();
+    const groupId = curr_group.id;
     const data = {
       message: e.target.message.value,
       groupId,
     };
+
     const res = await axios.post(
       "http://localhost:4000/message/add-message",
       data,
@@ -117,6 +128,7 @@ async function sendMessage(e) {
     div.textContent = "You: " + data.message;
     messages.appendChild(div);
     e.target.message.value = "";
+    scrollToBottom();
   } catch (e) {
     console.log(e);
   }
@@ -154,9 +166,10 @@ document.getElementById("crete-grp").addEventListener("click", () => {
 });
 
 async function showGroupMessages() {
-  console.log(curr_group);
-  const group = curr_group;
   try {
+    console.log(curr_group);
+    const group = curr_group;
+
     let final_messages =
       JSON.parse(localStorage.getItem(`message-${group.id}`)) || [];
     let final_users =
@@ -188,9 +201,12 @@ async function showGroupMessages() {
     final_messages = [...final_messages, ...res.data.messages];
     document.querySelector(".group-message h2").textContent = group.name;
     final_users = [...final_users, ...res2.data];
+    console.log(final_messages);
     final_messages.forEach((message) => {
-      showMessage(message, res.data.id, final_users);
+      if (message.type == "text") showMessage(message, final_users);
+      else showFiles(message, final_users);
     });
+    scrollToBottom();
     users.innerHTML = ``;
 
     final_users.forEach((user) => {
@@ -216,6 +232,40 @@ async function showGroupMessages() {
   } catch (e) {
     console.log(e);
   }
+}
+
+function showFiles(data, users) {
+  const id = curr_group.member.id;
+
+  const div = document.createElement("div");
+  console.log(typeof users);
+  if (id == data.memberId) {
+    div.className = "u-message u-multi";
+    div.textContent = "You";
+  } else {
+    const user = users.find((user) => data.memberId == user.member.id);
+    console.log(user);
+    if (user) {
+      div.className = "o-message o-multi";
+      div.textContent = user.name;
+    } else {
+      return;
+    }
+  }
+  if (data.type.startsWith("image")) {
+    const img = document.createElement("img");
+    img.src = data.message;
+    div.appendChild(img);
+  } else if (data.type.startsWith("video")) {
+    const video = document.createElement("video");
+    const source = document.createElement("source");
+    source.src = data.message;
+    video.appendChild(source);
+    video.controls = true;
+    div.appendChild(video);
+  }
+
+  messages.appendChild(div);
 }
 
 function showUser(user) {
@@ -258,7 +308,7 @@ function showUser(user) {
         );
         final_users = final_users.map((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+
           if (elem.member.userId == user.id) {
             elem.member.admin = true;
           }
@@ -288,7 +338,7 @@ function showUser(user) {
         console.log(res);
         final_users = final_users.map((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+
           if (elem.member.userId == user.id) {
             elem.member.admin = false;
           }
@@ -320,7 +370,7 @@ function showUser(user) {
         );
         final_users = final_users.filter((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+
           if (elem.member.userId != user.id) return elem;
         });
         localStorage.setItem(
@@ -403,8 +453,11 @@ function addUser(user) {
           },
         }
       );
+      console.log(res);
       displayUsers.removeChild(div);
-      showUser(user);
+      const show_user = res.data.user;
+      show_user.member = res.data.user[0];
+      showUser(show_user);
     } catch (e) {
       console.log(e);
     }
@@ -421,4 +474,57 @@ document.getElementById("search").addEventListener("keyup", (e) => {
     if (user.textContent.indexOf(text) == -1) user.classList.add("hide");
     else user.classList.remove("hide");
   });
+});
+
+document.getElementById("toggleInput").addEventListener("click", (e) => {
+  console.log(e.target.checked);
+  if (e.target.checked) {
+    document.getElementById("messsage").classList.add("hide");
+    document.getElementById("files").classList.remove("hide");
+  } else {
+    document.getElementById("files").classList.add("hide");
+    document.getElementById("messsage").classList.remove("hide");
+  }
+});
+
+document.getElementById("files").addEventListener("submit", async (e) => {
+  try {
+    const group = curr_group;
+    e.preventDefault();
+    console.log("clicked");
+
+    const formData = new FormData(document.getElementById("files"));
+
+    const res = await axios.post(
+      `http://localhost:4000/message/upload-file/${group.id}`,
+      formData,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    console.log(res);
+    const div = document.createElement("div");
+    div.className = "u-message u-multi";
+    div.textContent = "You";
+    const data = res.data;
+    if (data.type.startsWith("image")) {
+      const img = document.createElement("img");
+      img.src = data.message;
+      div.appendChild(img);
+    } else if (data.type.startsWith("video")) {
+      const video = document.createElement("video");
+      const source = document.createElement("source");
+      source.src = data.message;
+      video.appendChild(source);
+      video.controls = true;
+      div.appendChild(video);
+    }
+
+    messages.appendChild(div);
+    document.getElementById("file").value = "";
+  } catch (e) {
+    console.log(e);
+  }
 });

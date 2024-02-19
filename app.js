@@ -19,6 +19,7 @@ const messageRoutes = require("./backend/routes/message");
 const userRoutes = require("./backend/routes/user");
 const adminRoutes = require("./backend/routes/admin");
 
+
 User.belongsToMany(Group, { through: Member });
 Group.belongsToMany(User, { through: Member });
 

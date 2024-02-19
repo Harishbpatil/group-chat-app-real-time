@@ -3,6 +3,9 @@
   padding: 0;
 }
 
+
+
+
 .display {
   display: flex;
   flex-direction: row;
@@ -24,26 +27,26 @@
 .group-items {
   display: flex;
   justify-content: space-between;
-  background: #aee7e1;
+  background: #7fe79257;
   font-size: large;
   margin: 8px 10px;
   padding: 14px;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .group-items span:last-child {
   order: 2;
-  background: #78ad8d;
+  background: rgb(107, 223, 174);
   border-radius: 14px;
   min-width: 1.8vw;
   text-align: center;
-  transition: background-color 0.3s, color 0.3s;
 }
 
 .group-items:hover {
-  background: #128c7e;
+  background: #4bdb938f;
 }
+
+
 
 .messages {
   min-height: 85vh;
@@ -87,7 +90,7 @@
 .o-message {
   background: #ffffff;
   padding: 10px;
-  border-color: white;
+  border-color: rgb(212, 189, 189);
   border-radius: 10%;
   width: auto;
   height: fit-content;
@@ -96,33 +99,39 @@
   margin: 2px auto 2px 2px;
 }
 
-.send-messages > form {
+.send-messages {
   display: flex;
-  gap: 0.2em;
-  justify-content: center;
+  padding: 8px;
+  background: #f0f0f0;
+}
+
+.send-messages form {
+  display: flex;
   align-items: center;
+  width: 100%;
 }
 
-.send-messages > form > input {
-  padding: 6px 10px;
-  width: 48%;
-  font-size: medium;
-  outline: none;
-  border-radius: 7px;
-}
-
-.send-messages > form > button {
-  margin: 2px;
-  padding: 5px 8px;
-  border-radius: 4px;
-  background-color: #075e54;
-  color: #fff;
+.send-messages form input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
   border: none;
+  border-radius: 25px;
+  margin-right: 10px;
+  font-size: 16px;
+  outline: none;
+}
+
+.send-messages form button {
+  padding: 10px 20px;
+  background-color: #075e54;
+  color: white;
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.send-messages > form > button:hover {
+.send-messages form button:hover {
   background-color: #128c7e;
 }
 
@@ -137,43 +146,36 @@
 }
 
 .user {
-  background: #98ebcf;
+  background: #8cca79;
   font-size: x-large;
   display: flex;
   padding: 12px;
   justify-content: space-between;
   margin: 7px 0;
-  transition: background-color 0.3s;
-}
 
-.user:hover {
-  background-color: #ccc6c6;
+  &:hover {
+      background-color: #b9aeae;
+  }
 }
 
 .curr_user {
-  background: #c4ec9f;
+  background: #f4ffbf;
   font-size: x-large;
   display: flex;
   padding: 12px;
   justify-content: center;
   margin: 7px 0;
-  transition: background-color 0.3s;
-}
 
-.curr_user:hover {
-  background-color: #e0e0e0;
+  &:hover {
+      background-color: #b9aeae;
+  }
 }
 
 .add-user {
-  background: #b9ecdb;
+  background: #64bd78;
   font-size: x-large;
   padding: 12px;
   margin: 7px 0;
-  transition: background-color 0.3s;
-}
-
-.add-user:hover {
-  background-color: #bce2b0;
 }
 
 .admin span {
@@ -183,23 +185,103 @@
   border-radius: 7px;
   border: 3px px solid #9c1a1ade;
   height: fit-content;
+
 }
 
 .user button {
   margin: 0px 9px;
   padding: 5px 5px;
-  color: #0d0e0d;
 }
 
 .header {
   display: flex;
   align-items: center;
   height: 7vh;
-  background: #0b7467;
+  background: #238338;
   justify-content: center;
   cursor: pointer;
   user-select: none;
-  color: #fff;
+}
+
+.switch {
+  position: relative !important;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute !important;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s !important;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+img {
+  width: 38vw;
+}
+
+video{
+  width: 30vw;
+}
+
+.u-multi{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  font-weight: 800;
+  font-size: large;
+}
+
+.o-multi{
+  display: flex;
+  font-weight: 800;
+  font-size: large;
 }
 
 #crete-grp {
