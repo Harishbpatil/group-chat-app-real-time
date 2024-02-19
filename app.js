@@ -8,6 +8,7 @@ app.use(express.json());
 
 const sequelize = require("./backend/util/db");
 
+
 const Message = require("./backend/models/message");
 const User = require("./backend/models/user");
 const Group = require("./backend/models/group");
