@@ -23,7 +23,7 @@ form.addEventListener("submit", async (e) => {
         password: passwordInput.value,
       };
 
-      const res = await axios.post("http://54.88.157.175:4000/user/create", data);
+      const res = await axios.post("http://localhost:4000/user/create", data);
 
       if (res.status === 200 && res.data.success) {
         alert("User signed up successfully");

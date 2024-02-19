@@ -5,7 +5,10 @@ const path = require("path");
 require("dotenv").config();
 const app = express();
 app.use(express.json());
-
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer, {
+  cors: ["http://localhost:5500"],
+});
 
 const sequelize = require("./backend/util/db");
 
@@ -18,6 +21,8 @@ const groupRoutes = require("./backend/routes/group");
 const messageRoutes = require("./backend/routes/message");
 const userRoutes = require("./backend/routes/user");
 const adminRoutes = require("./backend/routes/admin");
+const messagesRoutes = require("./backend/routes/messages");
+const { socketAuthenticate } = require("./backend/middlewares/auth");
 
 User.belongsToMany(Group, { through: Member });
 Group.belongsToMany(User, { through: Member });
@@ -53,7 +58,17 @@ app.get("/chatapp", (req, res) => {
 sequelize
   .sync()
   .then(() => {
-    app.listen(4000);
+    const connection = (socket) => {
+      socket.use(async (packet, next) => {
+        await socketAuthenticate(socket, next);
+      });
+
+      console.log(socket.id);
+      messagesRoutes(io, socket);
+    };
+
+    io.on("connection", connection);
+    httpServer.listen(4000);
   })
   .catch((e) => {
     console.log(e);

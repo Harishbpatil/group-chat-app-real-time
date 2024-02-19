@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-const auth = require("../middlewares/auth");
+const {auth} = require('../middlewares/auth')
 const adminControllers = require("../controllers/admin");
 
 router.post("/remove-member/:groupId", auth, adminControllers.removeMember);

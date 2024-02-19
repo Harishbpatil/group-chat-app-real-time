@@ -1,3 +1,10 @@
+import { io } from "https://cdn.socket.io/4.7.2/socket.io.esm.min.js";
+
+const socket = io("http://localhost:4000", {
+  auth: {
+    token: localStorage.getItem("token"),
+  },
+});
 const messages = document.querySelector(".messages");
 let rendered = false;
 const groups = document.querySelector(".show-groups");
@@ -5,19 +12,23 @@ window.addEventListener("load", renderElements);
 var curr_group = null;
 const users = document.querySelector(".show-users");
 const displayUsers = document.querySelector(".display-users");
-
 async function renderElements() {
   try {
     if (!localStorage.getItem("token")) {
       window.location = "login.html";
     }
+
+    socket.on("connect", () => {
+      console.log(socket);
+    });
+
     const urlParams = new URLSearchParams(window.location.search);
 
     const id = urlParams.get("id");
     if (id) {
       console.log("id present");
       const group = await axios.get(
-        `http://54.88.157.175:4000/group/join-group/${id}`,
+        `http://localhost:4000/group/join-group/${id}`,
         {
           headers: {
             "auth-token": localStorage.getItem("token"),
@@ -26,7 +37,7 @@ async function renderElements() {
       );
       showGroups(group.data.group);
     }
-    const res = await axios.get("http://54.88.157.175:4000/group/get-groups", {
+    const res = await axios.get("http://localhost:4000/group/get-groups", {
       headers: {
         "auth-token": localStorage.getItem("token"),
       },
@@ -71,20 +82,25 @@ function showGroups(group) {
   groups.appendChild(div);
 }
 
-setInterval(async () => {
-  if (curr_group) await showGroupMessages();
-}, 2000);
+socket.on("show-message", showMessage);
 
-function showMessage(data, id, users) {
+function showMessage(data, users) {
+  const id = curr_group.member.id;
+  // const users = localStorage.getItem(`user-${curr_group.id}`)
   const div = document.createElement("div");
   console.log(typeof users);
   if (id == data.memberId) {
     div.className = "u-message";
     div.textContent = "You: " + data.message;
   } else {
-    div.className = "o-message";
     const user = users.find((user) => data.memberId == user.member.id);
-    div.textContent = user.name + ": " + data.message;
+    console.log(user);
+    if (user) {
+      div.className = "o-message";
+      div.textContent = user.name + ": " + data.message;
+    } else {
+      return;
+    }
   }
 
   messages.appendChild(div);
@@ -96,31 +112,31 @@ document
 
 async function sendMessage(e) {
   try {
-    const groupId = curr_group.id;
     e.preventDefault();
+    const groupId = curr_group.id;
     const data = {
       message: e.target.message.value,
       groupId,
     };
-    const res = await axios.post(
-      "http://54.88.157.175:4000/message/add-message",
-      data,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
-    console.log(res);
-    const div = document.createElement("div");
-    div.className = "u-message";
-    div.textContent = "You: " + data.message;
-    messages.appendChild(div);
-    e.target.message.value = "";
+    socket.emit("message:send-message", data, () => {
+      console.log("test");
+      const div = document.createElement("div");
+      div.className = "u-message";
+      div.textContent = "You: " + data.message;
+      messages.appendChild(div);
+      e.target.message.value = "";
+    });
   } catch (e) {
     console.log(e);
   }
 }
+
+socket.on("message:recieve-message", (data, username) => {
+  const div = document.createElement("div");
+  div.className = "o-message";
+  div.textContent = username + ": " + data;
+  messages.appendChild(div);
+});
 
 document
   .getElementById("create-new-group")
@@ -131,7 +147,7 @@ async function createNewGroup(e) {
     e.preventDefault();
     console.log(e.target.name.value);
     const group = await axios.post(
-      "http://54.88.157.175:4000/group/create",
+      "http://localhost:4000/group/create",
       { name: e.target.name.value },
       {
         headers: {
@@ -154,53 +170,23 @@ document.getElementById("crete-grp").addEventListener("click", () => {
 });
 
 async function showGroupMessages() {
-  console.log(curr_group);
-  const group = curr_group;
   try {
-    let final_messages =
-      JSON.parse(localStorage.getItem(`message-${group.id}`)) || [];
-    let final_users =
-      JSON.parse(localStorage.getItem(`user-${group.id}`)) || [];
-    let mId = 0;
-    let uId = 0;
-    if (final_messages.length > 0)
-      mId = final_messages[final_messages.length - 1].id;
-    if (final_users.length > 0) uId = final_users[final_users.length - 1].id;
-    const res = await axios.get(
-      `http://54.88.157.175:4000/message/get-messages/${group.id}/?messageId=${mId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
-    const res2 = await axios.get(
-      `http://54.88.157.175:4000/group/all-users/${group.id}/?id=${uId}`,
-      {
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      }
-    );
-    console.log(res);
-    console.log(res2);
-    messages.innerHTML = ``;
-    final_messages = [...final_messages, ...res.data.messages];
-    document.querySelector(".group-message h2").textContent = group.name;
-    final_users = [...final_users, ...res2.data];
-    final_messages.forEach((message) => {
-      showMessage(message, res.data.id, final_users);
+    console.log(curr_group);
+    const group = curr_group;
+    socket.emit("join-room", group.id, (groupMessages, id, groupUsers) => {
+      messages.innerHTML = ``;
+      document.querySelector(".group-message h2").textContent = group.name;
+      groupMessages.forEach((message) => {
+        console.log("hii");
+        showMessage(message, groupUsers);
+      });
+      users.innerHTML = ``;
+      groupUsers.forEach((user) => {
+        showUser(user);
+      });
     });
-    users.innerHTML = ``;
-
-    final_users.forEach((user) => {
-      showUser(user);
-    });
-    localStorage.setItem(`message-${group.id}`, JSON.stringify(final_messages));
-    localStorage.setItem(`user-${group.id}`, JSON.stringify(final_users));
-
     const res3 = await axios.post(
-      `http://54.88.157.175:4000/admin/show-users/${group.id}`,
+      `http://localhost:4000/admin/show-users/${group.id}`,
       null,
       {
         headers: {
@@ -248,7 +234,7 @@ function showUser(user) {
     makeAdmin.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://54.88.157.175:4000/admin/make-admin/${curr_group.id}`,
+          `http://localhost:4000/admin/make-admin/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -258,7 +244,7 @@ function showUser(user) {
         );
         final_users = final_users.map((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+          
           if (elem.member.userId == user.id) {
             elem.member.admin = true;
           }
@@ -277,7 +263,7 @@ function showUser(user) {
     removeAdmin.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://54.88.157.175:4000/admin/remove-admin/${curr_group.id}`,
+          `http://localhost:4000/admin/remove-admin/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -288,7 +274,7 @@ function showUser(user) {
         console.log(res);
         final_users = final_users.map((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+          
           if (elem.member.userId == user.id) {
             elem.member.admin = false;
           }
@@ -310,7 +296,7 @@ function showUser(user) {
     removeUser.onclick = async () => {
       try {
         const res = await axios.post(
-          `http://54.88.157.175:4000/admin/remove-member/${curr_group.id}`,
+          `http://localhost:4000/admin/remove-member/${curr_group.id}`,
           { userId: user.id },
           {
             headers: {
@@ -320,7 +306,7 @@ function showUser(user) {
         );
         final_users = final_users.filter((elem) => {
           console.log(elem);
-          // console.log(elem.userId + " : " + user.id)
+
           if (elem.member.userId != user.id) return elem;
         });
         localStorage.setItem(
@@ -393,7 +379,7 @@ function addUser(user) {
     try {
       console.log(curr_group);
       const res = await axios.post(
-        `http://54.88.157.175:4000/admin/add-user/${curr_group.id}`,
+        `http://localhost:4000/admin/add-user/${curr_group.id}`,
         {
           id: user.id,
         },
@@ -403,8 +389,11 @@ function addUser(user) {
           },
         }
       );
+      console.log(res);
       displayUsers.removeChild(div);
-      showUser(user);
+      const show_user = res.data.user;
+      show_user.member = res.data.user[0];
+      showUser(show_user);
     } catch (e) {
       console.log(e);
     }

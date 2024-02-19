@@ -9,7 +9,7 @@ form.addEventListener("submit", async (e) => {
 
       password: e.target.password.value,
     };
-    const res = await axios.post("http://54.88.157.175:4000/user/login", data);
+    const res = await axios.post("http://localhost:4000/user/login", data);
     console.log(res);
     if (res.status == 200) {
       alert("logged in successfully");
