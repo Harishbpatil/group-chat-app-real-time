@@ -1,11 +1,12 @@
 const messages = document.querySelector(".messages");
 let rendered = false;
 const groups = document.querySelector(".show-groups");
-window.addEventListener("load", renderElements);
+window.addEventListener("load", renderElemets);
 var curr_group = null;
 const users = document.querySelector(".show-users");
 const displayUsers = document.querySelector(".display-users");
-async function renderElements() {
+var otherUsers = null;
+async function renderElemets() {
   try {
     if (!localStorage.getItem("token")) {
       window.location = "login.html";
@@ -66,6 +67,11 @@ function showGroups(group) {
 
   div.onclick = async () => {
     curr_group = group;
+    if (curr_group.member.admin) {
+      document.getElementById("add-user-toggle-btn").classList.remove("hide");
+    } else {
+      document.getElementById("add-user-toggle-btn").classList.add("hide");
+    }
     document.querySelector(".header").classList.remove("hide");
     document.querySelector(".messages").classList.remove("hide");
     document.querySelector(".send-messages").classList.remove("hide");
@@ -76,9 +82,10 @@ function showGroups(group) {
   groups.appendChild(div);
 }
 
-setInterval(async () => {
-  if (curr_group) await showGroupMessages();
-}, 1000);
+// setInterval(async()=>{
+//     if(curr_group)
+//         await showGroupMessages()
+// }, 1000);
 
 function showMessage(data, users) {
   const id = curr_group.member.id;
@@ -142,27 +149,80 @@ async function createNewGroup(e) {
   try {
     e.preventDefault();
     console.log(e.target.name.value);
+    const selectedUsers = [];
+    otherUsers.forEach((user) => {
+      if (document.getElementById(user.id).checked) {
+        console.log(user.name);
+        selectedUsers.push(user.id);
+      }
+    });
     const group = await axios.post(
       "http://localhost:4000/group/create",
-      { name: e.target.name.value },
+      { name: e.target.name.value, selectedUsers },
       {
         headers: {
           "auth-token": localStorage.getItem("token"),
         },
       }
     );
+
+    console.log(selectedUsers);
+
     console.log(group);
     e.target.name.value = "";
     showGroups(group.data.group);
 
     document.querySelector(".new-group").classList.add("hide");
+
+    document.querySelector("#create-grp").textContent = "Create Group";
+    const addUsers = document.querySelector(".show-add-users");
+    document.querySelector(".show-groups").classList.remove("hide");
+    addUsers.classList.add("hide");
   } catch (e) {
     console.log(e);
   }
 }
 
-document.getElementById("crete-grp").addEventListener("click", () => {
-  document.querySelector(".new-group").classList.remove("hide");
+document.getElementById("create-grp").addEventListener("click", async () => {
+  if (document.querySelector(".new-group").classList.contains("hide")) {
+    document.querySelector(".new-group").classList.remove("hide");
+    const res = await axios.get("http://localhost:4000/group/other-users", {
+      headers: {
+        "auth-token": localStorage.getItem("token"),
+      },
+    });
+    console.log(res);
+    const addUsers = document.querySelector(".show-add-users");
+    document.querySelector(".show-groups").classList.add("hide");
+    addUsers.classList.remove("hide");
+    addUsers.innerHTML = ``;
+    otherUsers = res.data;
+    res.data.forEach((user) => {
+      console.log(user);
+      const div = document.createElement("div");
+
+      const label = document.createElement("label");
+      label.for = user.id;
+      label.textContent = user.name;
+
+      const input = document.createElement("input");
+      input.id = user.id;
+      input.name = user.id;
+      input.type = "checkbox";
+
+      div.appendChild(input);
+      div.appendChild(label);
+
+      addUsers.appendChild(div);
+    });
+    document.querySelector("#create-grp").textContent = "Back";
+  } else {
+    document.querySelector("#create-grp").textContent = "Create Group";
+    document.querySelector(".new-group").classList.add("hide");
+    const addUsers = document.querySelector(".show-add-users");
+    document.querySelector(".show-groups").classList.remove("hide");
+    addUsers.classList.add("hide");
+  }
 });
 
 async function showGroupMessages() {
@@ -206,7 +266,7 @@ async function showGroupMessages() {
       if (message.type == "text") showMessage(message, final_users);
       else showFiles(message, final_users);
     });
-    scrollToBottom();
+
     users.innerHTML = ``;
 
     final_users.forEach((user) => {
@@ -308,7 +368,7 @@ function showUser(user) {
         );
         final_users = final_users.map((elem) => {
           console.log(elem);
-
+          // console.log(elem.userId + " : " + user.id)
           if (elem.member.userId == user.id) {
             elem.member.admin = true;
           }
@@ -370,7 +430,7 @@ function showUser(user) {
         );
         final_users = final_users.filter((elem) => {
           console.log(elem);
-
+          // console.log(elem.userId + " : " + user.id)
           if (elem.member.userId != user.id) return elem;
         });
         localStorage.setItem(
@@ -442,6 +502,7 @@ function addUser(user) {
   btn.onclick = async () => {
     try {
       console.log(curr_group);
+
       const res = await axios.post(
         `http://localhost:4000/admin/add-user/${curr_group.id}`,
         {
@@ -492,7 +553,7 @@ document.getElementById("files").addEventListener("submit", async (e) => {
     const group = curr_group;
     e.preventDefault();
     console.log("clicked");
-
+    // console.log(e.target.file.files)
     const formData = new FormData(document.getElementById("files"));
 
     const res = await axios.post(

@@ -3,9 +3,6 @@
   padding: 0;
 }
 
-
-
-
 .display {
   display: flex;
   flex-direction: row;
@@ -45,8 +42,6 @@
 .group-items:hover {
   background: #4bdb938f;
 }
-
-
 
 .messages {
   min-height: 85vh;
@@ -154,7 +149,7 @@
   margin: 7px 0;
 
   &:hover {
-      background-color: #b9aeae;
+    background-color: #b9aeae;
   }
 }
 
@@ -167,7 +162,7 @@
   margin: 7px 0;
 
   &:hover {
-      background-color: #b9aeae;
+    background-color: #b9aeae;
   }
 }
 
@@ -185,7 +180,6 @@
   border-radius: 7px;
   border: 3px px solid #9c1a1ade;
   height: fit-content;
-
 }
 
 .user button {
@@ -210,7 +204,7 @@
   height: 34px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
@@ -224,8 +218,8 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -236,16 +230,16 @@
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s !important;
-  transition: .4s;
+  -webkit-transition: 0.4s !important;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196f3;
 }
 
 input:checked + .slider:before {
@@ -266,11 +260,11 @@ img {
   width: 38vw;
 }
 
-video{
+video {
   width: 30vw;
 }
 
-.u-multi{
+.u-multi {
   display: flex;
   flex-direction: row;
   justify-content: end;
@@ -278,13 +272,13 @@ video{
   font-size: large;
 }
 
-.o-multi{
+.o-multi {
   display: flex;
   font-weight: 800;
   font-size: large;
 }
 
-#crete-grp {
+.create-group {
   display: flex;
   align-items: center;
   height: 7vh;
@@ -301,13 +295,14 @@ video{
   transition: background-color 0.3s, transform 0.3s;
 }
 
-#crete-grp:hover {
+.create-group:hover {
   background: #128c7e;
   transform: scale(1.05);
 }
 
-#crete-grp::after {
+.create-group::after {
   content: "+";
   position: absolute;
+
   right: 10px;
 }

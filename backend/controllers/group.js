@@ -1,13 +1,26 @@
 const { Op } = require("sequelize");
 const Group = require("../models/group");
+const User = require("../models/user");
 
 exports.createNewGroup = async (req, res) => {
   try {
     const name = req.body.name;
-    // console.log(req.user.name)
-    const group = await Group.create({ name: name, admin: true });
-    const member = await req.user.addGroup(group, { through: { admin: true } });
-    return res.json({ group, member });
+
+    const group = await Group.create({ name: name });
+    const member = await req.user.addGroup(group, {
+      through: { admin: true, creator: true },
+    });
+    const selectedUsers = req.body.selectedUsers;
+    const users = await User.findAll({
+      where: {
+        id: selectedUsers,
+      },
+    });
+    const addedUsers = await group.addUsers(users);
+
+    const result = group.toJSON();
+    result.member = member[0];
+    return res.json({ group: result, member, addedUsers });
   } catch (e) {
     console.log(e);
     return res
@@ -72,5 +85,24 @@ exports.getUsers = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, msg: "Internal server error" });
+  }
+};
+
+exports.getOtherUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      where: {
+        id: {
+          [Op.ne]: req.user.id,
+        },
+      },
+      attributes: {
+        exclude: ["password"],
+      },
+    });
+    return res.json(users);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ msg: "Internal server error" });
   }
 };

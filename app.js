@@ -8,7 +8,6 @@ app.use(express.json());
 
 const sequelize = require("./backend/util/db");
 
-
 const Message = require("./backend/models/message");
 const User = require("./backend/models/user");
 const Group = require("./backend/models/group");
@@ -18,7 +17,9 @@ const groupRoutes = require("./backend/routes/group");
 const messageRoutes = require("./backend/routes/message");
 const userRoutes = require("./backend/routes/user");
 const adminRoutes = require("./backend/routes/admin");
+const cronJob = require("./backend/util/cron");
 
+//cronJob.start()
 
 User.belongsToMany(Group, { through: Member });
 Group.belongsToMany(User, { through: Member });
